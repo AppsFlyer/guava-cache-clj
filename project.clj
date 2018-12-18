@@ -4,7 +4,7 @@
   :license {:name "Eclipse Public License"
             :url  "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[clj-time "0.13.0"]
-                 [com.google.guava/guava "21.0"]]
+                 [com.google.guava/guava "27.0.1-jre"]]
   :deploy-repositories [["releases" :clojars]
                         ["snapshots" :clojars]]
   :global-vars {*warn-on-reflection* true}
