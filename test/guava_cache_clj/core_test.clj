@@ -1,7 +1,7 @@
 (ns guava-cache-clj.core-test
-  (:require [clj-time.core :as t]
-            [clojure.test :refer :all]
-            [guava-cache-clj.core :refer :all]))
+  (:require [clojure.test :refer [deftest is]]
+            [guava-cache-clj.core :refer [invalidate-all! invalidate! cleanup!
+                                          build cache->map stats]]))
 
 (deftest basic-caching
   (let [cache (build identity)]
@@ -77,14 +77,14 @@
 
 (deftest build-options
   (build identity {:concurrency-level 20})
-  (build identity {:expire-after-access (t/minutes 5)})
-  (build identity {:expire-after-write (t/minutes 5)})
+  (build identity {:expire-after-access-sec (* 60 5)})
+  (build identity {:expire-after-write-sec (* 60 5)})
   (build identity {:initial-capacity 20})
   (build identity {:maximum-size 20})
   (build identity {:maximum-weight 40
                    :weight-fn      #(* 20 (count %))})
   (build identity {:record-stats? true})
-  (build identity {:refresh-after-write (t/minutes 5)})
+  (build identity {:refresh-after-write-sec (* 60 5)})
   (build identity {:removal-listener-fn #(prn %)})
   (build identity {:soft-values? true})
   (build identity {:weak-keys? true})

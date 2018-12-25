@@ -1,6 +1,5 @@
 (ns guava-cache-clj.core
-  (:require [clj-time.core :as t]
-            [clojure.string :as string])
+  (:require [clojure.string :as string])
   (:import (java.util.concurrent TimeUnit)
            (clojure.lang IFn ILookup Counted)
            (com.google.common.base Supplier)
@@ -43,9 +42,9 @@
 (defn build
   ([loader-fn]
    (build loader-fn {}))
-  ([loader-fn {:keys [concurrency-level disabled? expire-after-access
-                      expire-after-write initial-capacity maximum-size
-                      maximum-weight record-stats? refresh-after-write
+  ([loader-fn {:keys [concurrency-level disabled? expire-after-access-sec
+                      expire-after-write-sec initial-capacity maximum-size
+                      maximum-weight record-stats? refresh-after-write-sec
                       removal-listener-fn soft-values? weak-keys? weak-values?
                       weight-fn]}]
    (let [b (if disabled?
@@ -53,12 +52,10 @@
              (CacheBuilder/newBuilder))]
      (when concurrency-level
        (.concurrencyLevel b concurrency-level))
-     (when expire-after-access
-       (.expireAfterAccess b (t/in-seconds expire-after-access)
-                           TimeUnit/SECONDS))
-     (when expire-after-write
-       (.expireAfterWrite b (t/in-seconds expire-after-write)
-                          TimeUnit/SECONDS))
+     (when expire-after-access-sec
+       (.expireAfterAccess b expire-after-access-sec TimeUnit/SECONDS))
+     (when expire-after-write-sec
+       (.expireAfterWrite b expire-after-write-sec TimeUnit/SECONDS))
      (when initial-capacity
        (.initialCapacity b initial-capacity))
      (when maximum-size
@@ -67,9 +64,8 @@
        (.maximumWeight b maximum-weight))
      (when record-stats?
        (.recordStats b))
-     (when refresh-after-write
-       (.refreshAfterWrite b (t/in-seconds refresh-after-write)
-                           TimeUnit/SECONDS))
+     (when refresh-after-write-sec
+       (.refreshAfterWrite b refresh-after-write-sec TimeUnit/SECONDS))
      (when removal-listener-fn
        (.removalListener b (removal-listener removal-listener-fn)))
      (when soft-values?
